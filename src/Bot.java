@@ -28,7 +28,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMsg(message, "Привет, Лысый, Куку Янка");
             }
             else{
-                sendMsg(message, "Я автобусный бот и я дурак!");
+                sendMsg(message, "Я автобусный бот и я дурак");
             }
         }
     }
