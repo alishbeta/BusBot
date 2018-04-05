@@ -31,7 +31,11 @@ public class Bot extends TelegramLongPollingBot {
           String text = message.getText();
           if (text.equals("/start")){
               messageOnMainMenu(message, getMainMenuKeyboard());
-          }else {
+          }else if (text.equals("Автобус")){
+              messageOnBusMenu(message, getBackKeyboard());
+          } else if(text.matches("\\d+")){
+              // TODO: 05.04.2018 Тут обрабатываем номера транспорта. Смотри в базе в каком меню юзер и генерируем урл с номером транспорта.
+          } else{
               messageOnMainMenu(message, getMainMenuKeyboard());
           }
       }
@@ -44,6 +48,23 @@ public class Bot extends TelegramLongPollingBot {
         sendMessage.setReplyToMessageId(message.getMessageId());
         sendMessage.setReplyMarkup(replyKeyboard);
         sendMessage.setText("Какой вид транспорта Вас интересует?");
+        try{
+            execute(sendMessage);
+        }catch (TelegramApiException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void messageOnBusMenu(Message message, ReplyKeyboardMarkup replyKeyboard){
+
+        // TODO: 05.04.2018 Тут нужно сохранять в базу юзера и его позицию в меню.
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.enableMarkdown(true);
+        sendMessage.setChatId(message.getChatId().toString());
+        sendMessage.setReplyToMessageId(message.getMessageId());
+        sendMessage.setReplyMarkup(replyKeyboard);
+        sendMessage.setText("Укажите номер автобуса");
         try{
             execute(sendMessage);
         }catch (TelegramApiException e){
@@ -68,6 +89,20 @@ public class Bot extends TelegramLongPollingBot {
         keyboard.add(keyboardSecondRow);
         replyKeyboardMarkup.setKeyboard(keyboard);
 
+        return replyKeyboardMarkup;
+    }
+
+    private ReplyKeyboardMarkup getBackKeyboard() {
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        KeyboardRow keyboardFirstRow = new KeyboardRow();
+        keyboardFirstRow.add("Назад");
+        keyboard.add(keyboardFirstRow);
+        replyKeyboardMarkup.setKeyboard(keyboard);
         return replyKeyboardMarkup;
     }
 
