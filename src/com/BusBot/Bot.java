@@ -10,6 +10,7 @@ import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,29 +20,39 @@ public class Bot extends TelegramLongPollingBot {
     //private static final Logger _Log = Logger.getLogger(com.BusBot.Bot.class.getName());
 
     @Override
-    public void onUpdateReceived(Update update){
+    public void onUpdateReceived(Update update){//  TODO: 06.04.2018  тут просится  throws ClassNotFoundException, SQLException но нельзя.
         Message message = update.getMessage();
+        try {
+            handleIncomingMessage(message);
+        } catch ( ClassNotFoundException e ) {
+            // TODO handle me
+        } catch (SQLException e){
 
-        handleIncomingMessage(message);
+        }
+
 
     }
 
-    private void handleIncomingMessage(Message message) {
+    private void handleIncomingMessage(Message message) throws ClassNotFoundException, SQLException {
       if (message != null && message.hasText()){
+          DbConnect.Conn();
           String text = message.getText();
           if (text.equals("/start")){
               messageOnMainMenu(message, getMainMenuKeyboard());
           }else if (text.equals("Автобус")){
               messageOnBusMenu(message, getBackKeyboard());
           } else if(text.matches("\\d+")){
+              // TODO: 06.04.2018 Для примера, смотри DbConnect.ReadOne(message.getChatId().toString()); возвращает id, chatId, menu(активное меню)
               // TODO: 05.04.2018 Тут обрабатываем номера транспорта. Смотри в базе в каком меню юзер и генерируем урл с номером транспорта.
           } else{
               messageOnMainMenu(message, getMainMenuKeyboard());
           }
+          DbConnect.CloseDB();
       }
     }
 
-    private void messageOnMainMenu(Message message, ReplyKeyboardMarkup replyKeyboard){
+    private void messageOnMainMenu(Message message, ReplyKeyboardMarkup replyKeyboard) throws ClassNotFoundException, SQLException{
+        DbConnect.WriteDB(message.getChatId().toString(),"start");
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(message.getChatId().toString());
@@ -55,10 +66,10 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    private void messageOnBusMenu(Message message, ReplyKeyboardMarkup replyKeyboard){
+    private void messageOnBusMenu(Message message, ReplyKeyboardMarkup replyKeyboard) throws ClassNotFoundException, SQLException{
 
         // TODO: 05.04.2018 Тут нужно сохранять в базу юзера и его позицию в меню.
-
+        DbConnect.WriteDB(message.getChatId().toString(),"autobus");
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(message.getChatId().toString());

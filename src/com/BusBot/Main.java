@@ -9,12 +9,17 @@ import org.telegram.telegrambots.logging.BotsFileHandler;
 import java.io.IOException;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
+import java.sql.SQLException;
 
 public class Main {
     private static final String LOGTAG = "MAIN";
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+        DbConnect.Conn();
+        DbConnect.CreateDB();
+        DbConnect.CloseDB();
+        //DbConnect.WriteDB();
+        //DbConnect.ReadDB();
 
 
         BotLogger.setLevel(Level.ALL);
