@@ -25,7 +25,7 @@ public class Bot extends TelegramLongPollingBot {
         Message message = update.getMessage();
         if(message != null && message.hasText()){
             if(message.getText().equals("/start")){
-                sendMsg(message, "Привет, Лысый, Куку Янка");
+                sendMsg(message, "Привет, Димончик, пока Янка");
             }
             else{
                 sendMsg(message, "Я автобусный бот и я дурак");
