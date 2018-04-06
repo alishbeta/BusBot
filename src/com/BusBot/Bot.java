@@ -46,8 +46,6 @@ public class Bot extends TelegramLongPollingBot {
           }else if (text.equals("Автобус")){
               messageOnBusMenu(message, getBackKeyboard());
           } else if(text.matches("\\d+")){
-              // TODO: 06.04.2018 Для примера, смотри DbConnect.ReadOne(message.getChatId().toString()); возвращает id, chatId, menu(активное меню)
-              // TODO: 05.04.2018 Тут обрабатываем номера транспорта. Смотри в базе в каком меню юзер и генерируем урл с номером транспорта.
               String[] data = DbConnect.ReadOne(message.getChatId().toString());
               if (data[2].equals("Автобус")){
                   String Transport = "bus";
@@ -56,7 +54,6 @@ public class Bot extends TelegramLongPollingBot {
                   }catch (HttpStatusException e){
                       sendMSG(message, getBackKeyboard(), "Данный маршрут не найдет.");
                   }
-
               }
               System.out.println(data[2]);
           } else{
@@ -97,7 +94,6 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private void sendMSG(Message message, ReplyKeyboardMarkup replyKeyboard, String s) throws SQLException {
-        DbConnect.WriteDB(message.getChatId().toString(), message.getText());
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(message.getChatId().toString());
