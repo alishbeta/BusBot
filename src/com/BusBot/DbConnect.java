@@ -1,7 +1,5 @@
 package com.BusBot;
 
-import org.telegram.telegrambots.api.objects.Chat;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -23,7 +21,7 @@ public class DbConnect {
     }
 
     // --------Создание таблицы--------
-    public static void CreateDB() throws ClassNotFoundException, SQLException {
+    public static void CreateDB() throws SQLException {
         statmt = conn.createStatement();
         statmt.execute("CREATE TABLE if not exists 'users' ('id' INTEGER PRIMARY KEY AUTOINCREMENT, 'ChatId' STRING UNIQUE, 'menu' VARCHAR(255) NULL);");
         statmt.executeQuery("SELECT * FROM users");
@@ -33,11 +31,11 @@ public class DbConnect {
     // --------Заполнение таблицы--------
     public static void WriteDB(String id, String menu) throws SQLException {
         statmt.execute("REPLACE INTO 'users' ('ChatId', 'menu') VALUES (" + id + ", '" + menu + "'); ");
-        System.out.println("Таблица заполнена");
+        System.out.println("Юзер с чата № " + id + " перешел в меню " + menu);
     }
 
     // -------- Вывод таблицы--------
-    public static void ReadDB() throws ClassNotFoundException, SQLException {
+    public static void ReadDB() throws SQLException {
         resSet = statmt.executeQuery("SELECT * FROM users");
 
         while (resSet.next()) {
@@ -53,7 +51,7 @@ public class DbConnect {
         System.out.println("Таблица выведена");
     }
 
-    public static String[] ReadOne(String ChatId) throws ClassNotFoundException, SQLException {
+    public static String[] ReadOne(String ChatId) throws SQLException {
         resSet = statmt.executeQuery("SELECT * FROM users WHERE ChatId = " + ChatId);
         String[] response = new String[3];
         while (resSet.next()) {

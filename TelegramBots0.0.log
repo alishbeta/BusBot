@@ -1,0 +1,15 @@
+[6_4_2018_12:34:18] {SEVERE} BOTSESSION - java.lang.NullPointerException
+	at com.BusBot.DbConnect.CloseDB(DbConnect.java:72)
+	at com.BusBot.Bot.handleIncomingMessage(Bot.java:50)
+	at com.BusBot.Bot.onUpdateReceived(Bot.java:27)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1378)
+	at org.telegram.telegrambots.generics.LongPollingBot.onUpdatesReceived(LongPollingBot.java:27)
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$HandlerThread.run(DefaultBotSession.java:311)
+[6_4_2018_12:43:32] {SEVERE} BOTSESSION - java.lang.NullPointerException
+	at com.BusBot.DbConnect.CloseDB(DbConnect.java:72)
+	at com.BusBot.Bot.messageOnBusMenu(Bot.java:72)
+	at com.BusBot.Bot.handleIncomingMessage(Bot.java:43)
+	at com.BusBot.Bot.onUpdateReceived(Bot.java:27)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1378)
+	at org.telegram.telegrambots.generics.LongPollingBot.onUpdatesReceived(LongPollingBot.java:27)
+	at org.telegram.telegrambots.updatesreceivers.DefaultBotSession$HandlerThread.run(DefaultBotSession.java:311)

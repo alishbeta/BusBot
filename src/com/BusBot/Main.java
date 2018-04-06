@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         DbConnect.Conn();
         DbConnect.CreateDB();
-        DbConnect.CloseDB();
+        //DbConnect.CloseDB();
         //DbConnect.WriteDB();
         //DbConnect.ReadDB();
 
