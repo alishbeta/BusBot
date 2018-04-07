@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import org.jsoup.nodes.Document;
 
 //import java.util.logging.Logger;
 
@@ -51,20 +52,42 @@ public class Bot extends TelegramLongPollingBot {
               if (data[2].equals("Автобус")){
                   String Transport = "bus";
                   try{
-                      List<String> info = Parser.GetPage(Transport, message.getText());
+                      Document page = Parser.GetPage(Transport, message.getText());
                       StringBuilder msg = new StringBuilder();
+                      StringBuilder msg2 = new StringBuilder();
+
+                      String title = Parser.GetTitle(page);
+                      List<String> directions = Parser.GetDirection(page);
+                      List<String> timesAB = Parser.GetTimesAB(page);
+                      List<String> timesBA = Parser.GetTimesBA(page);
+
+                      msg.append("<b>" + title + "</b>" );
+                      msg.append("\n");
+                      msg.append("<i>(" + directions.get(0)+")</i>");
+                      msg2.append("<b>" + title + "</b>" );
+                      msg2.append("\n");
+                      msg2.append("<i>(" + directions.get(1)+")</i>");
+
                       Pattern p = Pattern.compile("[А-Яф-я]+", Pattern.UNICODE_CHARACTER_CLASS);
-                      for (int i = 0; i < info.size(); i++) {
-                          msg.append(info.get(i));
-                          if (p.matcher(info.get(i)).find()){
+
+
+                      for (int i = 0; i < timesAB.size(); i++) {
+                          msg.append(timesAB.get(i) + " ");
+                          if (p.matcher(timesAB.get(i)).find()){
                               msg.append("\n");
                           }
-                          if (i%5 == 0){
-                              msg.append("\n");
-                          }
-                          msg.append(" ");
                       }
+
+                      for (int i = 0; i < timesBA.size(); i++) {
+                          msg2.append(timesBA.get(i) + " ");
+                          if (p.matcher(timesBA.get(i)).find()){
+                              msg2.append("\n");
+                          }
+                      }
+
+
                       sendMSG(message, getBackKeyboard(), msg.toString());
+                      sendMSG(message, getBackKeyboard(), msg2.toString());
                   }catch (HttpStatusException e){
                       sendMSG(message, getBackKeyboard(), "Данный маршрут не найдет.");
                   }
