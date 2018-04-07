@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 //import java.util.logging.Logger;
 
@@ -52,11 +53,17 @@ public class Bot extends TelegramLongPollingBot {
                   try{
                       List<String> info = Parser.GetPage(Transport, message.getText());
                       StringBuilder msg = new StringBuilder();
+                      Pattern p = Pattern.compile("[А-Яф-я]+", Pattern.UNICODE_CHARACTER_CLASS);
                       for (int i = 0; i < info.size(); i++) {
                           msg.append(info.get(i));
-                          msg.append("\n");
+                          if (p.matcher(info.get(i)).find()){
+                              msg.append("\n");
+                          }
+                          if (i%5 == 0){
+                              msg.append("\n");
+                          }
+                          msg.append(" ");
                       }
-
                       sendMSG(message, getBackKeyboard(), msg.toString());
                   }catch (HttpStatusException e){
                       sendMSG(message, getBackKeyboard(), "Данный маршрут не найдет.");
@@ -106,6 +113,7 @@ public class Bot extends TelegramLongPollingBot {
         sendMessage.setChatId(message.getChatId().toString());
         sendMessage.setReplyToMessageId(message.getMessageId());
         sendMessage.setReplyMarkup(replyKeyboard);
+        sendMessage.setParseMode("HTML");
         sendMessage.setText(s);
         try{
             execute(sendMessage);

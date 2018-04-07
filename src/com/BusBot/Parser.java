@@ -22,14 +22,13 @@ public class Parser {
 
         Elements forwardTRow = d.getElementsByClass("forward").get(0).getElementsByClass("t-row");
         for (int i = 1; i < pointsAB.size(); i++) {
-            data.add(pointsAB.get(i).text());
+            data.add("\n<b>" + pointsAB.get(i).text() + "</b>");
             System.out.println(pointsAB.get(i).text());
             for (int i1 = 1; i1 < forwardTRow.size(); i1++) {
                 data.add(forwardTRow.get(i1).getElementsByClass("tt-f").get(i).text());
                 System.out.println(forwardTRow.get(i1).getElementsByClass("tt-f").get(i).text());
             }
         }
-
         return data;
     }
 }
