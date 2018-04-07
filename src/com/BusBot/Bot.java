@@ -50,12 +50,19 @@ public class Bot extends TelegramLongPollingBot {
               if (data[2].equals("Автобус")){
                   String Transport = "bus";
                   try{
-                      Parser.GetPage(Transport, message.getText());
+                      List<String> info = Parser.GetPage(Transport, message.getText());
+                      StringBuilder msg = new StringBuilder();
+                      for (int i = 0; i < info.size(); i++) {
+                          msg.append(info.get(i));
+                          msg.append("\n");
+                      }
+
+                      sendMSG(message, getBackKeyboard(), msg.toString());
                   }catch (HttpStatusException e){
                       sendMSG(message, getBackKeyboard(), "Данный маршрут не найдет.");
                   }
               }
-              System.out.println(data[2]);
+              //System.out.println(data[2]);
           } else{
               messageOnMainMenu(message, getMainMenuKeyboard());
           }
